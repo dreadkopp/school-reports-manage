@@ -52,6 +52,7 @@ class ReportsPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->default()
             ->login();
     }
 }

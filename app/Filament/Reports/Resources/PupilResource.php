@@ -5,6 +5,7 @@ namespace App\Filament\Reports\Resources;
 use App\Filament\Reports\Resources\PupilResource\Pages;
 use App\Filament\Reports\Resources\PupilResource\RelationManagers;
 use App\Models\Pupil;
+use App\Models\SchoolGroup;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,7 +24,9 @@ class PupilResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name'),
+                Forms\Components\Select::make('school_group_id')
+                ->options(SchoolGroup::query()->pluck('name','id')->toArray()),
             ]);
     }
 

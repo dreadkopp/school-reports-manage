@@ -5,6 +5,9 @@ namespace App\Filament\Reports\Resources;
 use App\Filament\Reports\Resources\AssessmentResource\Pages;
 use App\Filament\Reports\Resources\AssessmentResource\RelationManagers;
 use App\Models\Assessment;
+use App\Models\Pupil;
+use App\Models\SchoolSubject;
+use App\Models\Semester;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,7 +26,19 @@ class AssessmentResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\Select::make('pupil_id')
+                ->options(Pupil::query()->pluck('name','id')->toArray()),
+
+                Forms\Components\Select::make('school_subject_id')
+                    ->options(SchoolSubject::query()->pluck('name','id')->toArray()),
+
+                Forms\Components\Select::make('semester_id')
+                    ->options(Semester::query()->pluck('start_date','id')->toArray()),
+
+                Forms\Components\Textarea::make('descriptive'),
+                Forms\Components\Textarea::make('notes'),
+                Forms\Components\Textarea::make('internal_notes'),
+
             ]);
     }
 

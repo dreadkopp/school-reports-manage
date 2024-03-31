@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  *
  * @property int $id
+ * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Database\Factories\SchoolGroupFactory factory($count = null, $state = [])
@@ -17,10 +18,14 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|SchoolGroup query()
  * @method static \Illuminate\Database\Eloquent\Builder|SchoolGroup whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SchoolGroup whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SchoolGroup whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SchoolGroup whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class SchoolGroup extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name'
+    ];
 }

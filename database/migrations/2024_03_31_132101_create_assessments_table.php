@@ -21,6 +21,8 @@ return new class extends Migration
             $table->foreignIdFor(Semester::class)->constrained();
             $table->text('descriptive');
             $table->text('notes');
+            $table->text('internal_notes');
+            $table->enum('status', ['new','draft','in-progress','final']);
             $table->timestamps();
         });
     }
