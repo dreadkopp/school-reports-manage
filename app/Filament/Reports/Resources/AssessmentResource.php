@@ -59,6 +59,12 @@ class AssessmentResource extends Resource
                         ->toArray())
                     ->required(),
 
+
+
+                Select::make('status')
+                    ->options(['in-progress','draft','final'])
+                    ->required(),
+
                 RichEditor::make('descriptive')
                     ->columnSpanFull()
                     ->toolbarButtons($toolBarOptions),
