@@ -15,8 +15,6 @@ class EditUser extends EditRecord
     public function beforeSave():void
     {
         $password = $this->data['password'];
-        $passwordConfirm = $this->data['password_confirm'];
-
         unset($this->data['password']);
         unset($this->data['password_confirm']);
 

@@ -5,6 +5,7 @@ namespace App\Filament\Reports\Resources\UserResource\Pages;
 use App\Filament\Reports\Resources\UserResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Hash;
 
 class CreateUser extends CreateRecord
 {
@@ -12,6 +13,11 @@ class CreateUser extends CreateRecord
 
     public function beforeCreate():void
     {
-        dd($this);
+        $password = $this->data['password'];
+        unset($this->data['password']);
+        unset($this->data['password_confirm']);
+
+        $this->data['password'] = Hash::make($password);
+
     }
 }
