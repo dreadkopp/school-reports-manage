@@ -7,27 +7,28 @@ Get started:
   - docker-compose
 
 run 
-<code>
-sail build
-</code>
+
+```
+./sail build
+```
 
 after successful build run
 
-<code>
+```
 ./sail init
-</code>
+```
 
 now you are ready to start it up
 
-<code>
+```
 ./sail up
-</code>
+```
 
 in a second terminal setup the database using
 
-<code>
+```
 ./sail artisan migrate:fresh --seed
-</code>
+```
 
 you should now be able to login via 
 
