@@ -24,9 +24,11 @@ class PupilResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name'),
+                Forms\Components\TextInput::make('name')
+                    ->required(),
                 Forms\Components\Select::make('school_group_id')
-                ->options(SchoolGroup::query()->pluck('name','id')->toArray()),
+                ->options(SchoolGroup::query()->pluck('name','id')->toArray())
+                    ->required(),
             ]);
     }
 

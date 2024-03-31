@@ -19,9 +19,9 @@ return new class extends Migration
             $table->foreignIdFor(Pupil::class)->constrained();
             $table->foreignIdFor(SchoolSubject::class)->constrained();
             $table->foreignIdFor(Semester::class)->constrained();
-            $table->text('descriptive');
-            $table->text('notes');
-            $table->text('internal_notes');
+            $table->text('descriptive')->default('');
+            $table->text('notes')->default('');
+            $table->text('internal_notes')->default('');
             $table->enum('status', ['new','draft','in-progress','final']);
             $table->timestamps();
         });

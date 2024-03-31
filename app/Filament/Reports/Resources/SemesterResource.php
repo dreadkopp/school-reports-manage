@@ -23,8 +23,10 @@ class SemesterResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\DatePicker::make('start_date'),
-                Forms\Components\DatePicker::make('end_date'),
+                Forms\Components\DatePicker::make('start_date')
+                    ->required(),
+                Forms\Components\DatePicker::make('end_date')
+                    ->required(),
             ]);
     }
 

@@ -24,9 +24,11 @@ class SchoolSubjectResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name'),
+                Forms\Components\TextInput::make('name')
+                    ->required(),
                 Forms\Components\Select::make('subject_group_id')
                 ->options(SubjectGroup::query()->pluck('name','id'))
+                    ->required()
             ]);
     }
 

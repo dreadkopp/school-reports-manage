@@ -24,6 +24,7 @@ class SchoolGroupResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->required()
             ]);
     }
 

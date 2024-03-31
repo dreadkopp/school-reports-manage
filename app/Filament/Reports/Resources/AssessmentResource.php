@@ -42,10 +42,12 @@ class AssessmentResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('pupil_id')
-                ->options(Pupil::query()->pluck('name','id')->toArray()),
+                ->options(Pupil::query()->pluck('name','id')->toArray())
+                ->required(),
 
                 Forms\Components\Select::make('school_subject_id')
-                    ->options(SchoolSubject::query()->pluck('name','id')->toArray()),
+                    ->options(SchoolSubject::query()->pluck('name','id')->toArray())
+                ->required(),
 
                 Forms\Components\Select::make('semester_id')
                     ->options(Semester::query()
@@ -53,7 +55,8 @@ class AssessmentResource extends Resource
                         ->lazy()
                         ->keyBy('id')
                         ->map(fn(Semester $semester) => $semester->start_date->format('m-Y'). ' - ' . $semester->end_date->format('m-Y'))
-                        ->toArray()),
+                        ->toArray())
+                    ->required(),
 
                 Forms\Components\RichEditor::make('descriptive')
                     ->columnSpanFull()
