@@ -10,6 +10,7 @@ use App\Models\Pupil;
 use App\Models\SchoolSubject;
 use App\Models\Semester;
 use Carbon\Carbon;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
@@ -61,19 +62,17 @@ class AssessmentResource extends Resource
                         ->toArray())
                     ->required(),
 
-
-
                 Select::make('status')
-                    ->options(['in-progress','draft','final'])
+                    ->options(['in-progress', 'draft', 'final'])
                     ->required(),
 
-                RichEditor::make('descriptive')
+                MarkdownEditor::make('descriptive')
                     ->columnSpanFull()
                     ->toolbarButtons($toolBarOptions),
-                RichEditor::make('notes')
+                MarkdownEditor::make('notes')
                     ->columnSpanFull()
                     ->toolbarButtons($toolBarOptions),
-                RichEditor::make('internal_notes')
+                MarkdownEditor::make('internal_notes')
                     ->columnSpanFull()
                     ->toolbarButtons($toolBarOptions),
             ]);
@@ -84,13 +83,13 @@ class AssessmentResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id'),
-           IconColumn::make('status')
-           ->icon(fn (string $state): string => match ($state) {
-                'new' => 'heroicon-o-pencil',
-                'draft' => 'heroicon-o-pencil',
-                'in-progress' => 'heroicon-o-clock',
-                'final' => 'heroicon-o-check-circle',
-            })
+                IconColumn::make('status')
+                    ->icon(fn (string $state): string => match ($state) {
+                        'new'         => 'heroicon-o-pencil',
+                        'draft'       => 'heroicon-o-pencil',
+                        'in-progress' => 'heroicon-o-clock',
+                        'final'       => 'heroicon-o-check-circle',
+                    }),
             ])
             ->filters([
             ])

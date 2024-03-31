@@ -42,14 +42,14 @@ class PupilResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name'),
-                IconColumn::make('status'), //TODO: check all assessments for 'final' state
+                IconColumn::make('status'), // TODO: check all assessments for 'final' state
             ])
             ->filters([
             ])
             ->actions([
                 EditAction::make(),
                 Action::make('exportReport'),
-                Action::make('previewReport')
+                Action::make('previewReport'),
                 // TODO: get all assessments of current semester for pupil. check if all are in state final, generate final PDF
             ])
             ->bulkActions([
