@@ -16,7 +16,7 @@ services:
       - MYSQL_USER=dev
       - MYSQL_PASSWORD=geheim
     healthcheck:
-      test: mysql base -u dev -pgeheim -e 'SHOW TABLES;'
+      test: mysql testimonials -u dev -pgeheim -e 'SHOW TABLES;'
       interval: 5s
       timeout: 5s
       retries: 10
@@ -24,6 +24,14 @@ services:
 
   cache:
     image: eqalpha/keydb
+    environment:
+      ALLOW_EMPTY_PASSWORD: yes
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 1s
 
   app:
     build:
@@ -32,11 +40,16 @@ services:
       args:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
+    depends_on:
+      cache:
+        condition: service_healthy
+      database:
+        condition: service_healthy
     environment:
       APP_URL: "https://testimonials.localhost"
       APP_DEBUG: true
       APP_ENV: local
-      DB_HOST: db
+      DB_HOST: database
       DB_DATABASE: testimonials
       DB_USERNAME: dev
       DB_PASSWORD: geheim
