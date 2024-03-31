@@ -11,6 +11,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -45,6 +46,9 @@ class PupilResource extends Resource
             ])
             ->actions([
                 EditAction::make(),
+                Action::make('exportReport'),
+                Action::make('previewReport')
+                // TODO: get all assessments of current semester for pupil. check if all are in state final, generate final PDF
             ])
             ->bulkActions([
                 BulkActionGroup::make([
