@@ -52,7 +52,7 @@ class AssessmentResource extends Resource
 
                 Select::make('semester_id')
                     ->options(Semester::query()
-                        ->where('end_date', '<=', Carbon::now())
+                        ->where('end_date', '>=', Carbon::now())
                         ->lazy()
                         ->keyBy('id')
                         ->map(fn (Semester $semester) => $semester->start_date->format('m-Y').' - '.$semester->end_date->format('m-Y'))
