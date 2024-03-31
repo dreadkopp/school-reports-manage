@@ -82,9 +82,9 @@ RUN addgroup -S testimonials -g $GID && adduser -S testimonials -G testimonials 
 
 RUN chown -R testimonials:testimonials /var/log
 
-COPY  --chmod=444 ../config/php.ini /usr/local/etc/php/php.ini
+COPY  --chmod=444 ../docker_config/php.ini /usr/local/etc/php/php.ini
 
 USER testimonials
 
-COPY --chown=testimonials config/entry.sh /entry.sh
+COPY --chown=testimonials docker_config/entry.sh /entry.sh
 ENTRYPOINT ["/entry.sh"]
