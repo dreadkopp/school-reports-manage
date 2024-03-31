@@ -8,6 +8,7 @@ use App\Models\Assessment;
 use App\Models\Pupil;
 use App\Models\SchoolSubject;
 use App\Models\Semester;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -33,11 +34,16 @@ class AssessmentResource extends Resource
                     ->options(SchoolSubject::query()->pluck('name','id')->toArray()),
 
                 Forms\Components\Select::make('semester_id')
-                    ->options(Semester::query()->pluck('start_date','id')->toArray()),
+                    ->options(Semester::query()
+                        ->where('end_date', '<=', Carbon::now())
+                        ->lazy()
+                        ->keyBy('id')
+                        ->map(fn(Semester $semester) => $semester->start_date->format('m-Y'). ' - ' . $semester->end_date->format('m-Y'))
+                        ->toArray()),
 
-                Forms\Components\Textarea::make('descriptive'),
-                Forms\Components\Textarea::make('notes'),
-                Forms\Components\Textarea::make('internal_notes'),
+                Forms\Components\RichEditor::make('content')('descriptive'),
+                Forms\Components\RichEditor::make('notes'),
+                Forms\Components\RichEditor::make('internal_notes'),
 
             ]);
     }

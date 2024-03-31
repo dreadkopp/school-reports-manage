@@ -2,9 +2,9 @@
 
 namespace App\Filament\Reports\Resources;
 
-use App\Filament\Reports\Resources\SemesterResource\Pages;
-use App\Filament\Reports\Resources\SemesterResource\RelationManagers;
-use App\Models\Semester;
+use App\Filament\Reports\Resources\SubjectGroupResource\Pages;
+use App\Filament\Reports\Resources\SubjectGroupResource\RelationManagers;
+use App\Models\SubjectGroup;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,9 +13,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class SemesterResource extends Resource
+class SubjectGroupResource extends Resource
 {
-    protected static ?string $model = Semester::class;
+    protected static ?string $model = SubjectGroup::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -23,8 +23,7 @@ class SemesterResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\DatePicker::make('start_date'),
-                Forms\Components\DatePicker::make('end_date'),
+                Forms\Components\TextInput::make('name')
             ]);
     }
 
@@ -32,8 +31,7 @@ class SemesterResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('start_date')->date('m-Y'),
-                Tables\Columns\TextColumn::make('end_date')->date('m-Y'),
+                Tables\Columns\TextColumn::make('name')
             ])
             ->filters([
                 //
@@ -58,9 +56,9 @@ class SemesterResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSemesters::route('/'),
-            'create' => Pages\CreateSemester::route('/create'),
-            'edit' => Pages\EditSemester::route('/{record}/edit'),
+            'index' => Pages\ListSubjectGroups::route('/'),
+            'create' => Pages\CreateSubjectGroup::route('/create'),
+            'edit' => Pages\EditSubjectGroup::route('/{record}/edit'),
         ];
     }
 }

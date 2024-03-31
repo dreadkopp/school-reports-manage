@@ -5,6 +5,7 @@ namespace App\Filament\Reports\Resources;
 use App\Filament\Reports\Resources\SchoolSubjectResource\Pages;
 use App\Filament\Reports\Resources\SchoolSubjectResource\RelationManagers;
 use App\Models\SchoolSubject;
+use App\Models\SubjectGroup;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,7 +24,9 @@ class SchoolSubjectResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name'),
+                Forms\Components\Select::make('subject_group_id')
+                ->options(SubjectGroup::query()->pluck('name','id'))
             ]);
     }
 
@@ -31,7 +34,7 @@ class SchoolSubjectResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
             ])
             ->filters([
                 //
