@@ -88,3 +88,5 @@ USER school-reports
 
 COPY --chown=school-reports docker_config/entry.sh /entry.sh
 ENTRYPOINT ["/entry.sh"]
+HEALTHCHECK --interval=10s --timeout=2s --start-period=10s --retries=3 CMD curl --silent --fail localhost
+EXPOSE 80

@@ -4,67 +4,100 @@ volumes:
   sql:
 
 services:
-  database:
-    image: mariadb:10.6
-    ports:
-      - 6033:3306
-    volumes:
-      - sql:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=geheim
-      - MYSQL_DATABASE=school-reports
-      - MYSQL_USER=dev
-      - MYSQL_PASSWORD=geheim
-    healthcheck:
-      test: mysql school-reports -u dev -pgeheim -e 'SHOW TABLES;'
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 1s
 
-  cache:
-    image: eqalpha/keydb
-    environment:
-      ALLOW_EMPTY_PASSWORD: yes
-    healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
-      interval: 5s
-      timeout: 10s
-      retries: 10
-      start_period: 1s
+    web-proxy:
+        image: traefik:2.9
+        ports:
+            - 80:80
+            - 443:443
+            - 8080:8080
+            - 6379:6379
+            - 9200:9200
+        volumes:
+            - ./certs:/certs
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./traefik_conf.yml:/config.yml
+        healthcheck:
+            test: [ "CMD", "traefik", "healthcheck", "--ping" ]
+            interval: 10s
+            timeout: 10s
+            retries: 120
+        command:
+            - "--log.level=DEBUG"
+            - "--api.insecure=true"
+            - "--accesslog"
+            - "--providers.docker=true"
+            - "--providers.docker.exposedbydefault=false"
+            - "--ping"
+            - "--entrypoints.redis.address=:6379"
+            - "--entrypoints.elastic.address=:9200"
+            - "--entrypoints.web.address=:80"
+            - "--entrypoints.websecure.address=:443"
+            - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+            - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+            - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
 
-  app:
-    build:
-      context: ./
-      dockerfile: ./docker/Dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
-    depends_on:
-      cache:
-        condition: service_healthy
-      database:
-        condition: service_healthy
-    environment:
-      APP_URL: "https://school-reports.localhost"
-      APP_DEBUG: true
-      APP_ENV: local
-      DB_HOST: database
-      DB_DATABASE: school-reports
-      DB_USERNAME: dev
-      DB_PASSWORD: geheim
-      APM_ACTIVE: true
-      REDIS_HOST: cache
-      REDIS_CACHE_DB: 1
-    volumes:
-      - ./:/var/www/app
-      - ~/.config/composer:/home/myswooop/.composer
-      - ~/.cache/composer:/home/myswooop/.composer/cache
-    labels:
-      traefik.enable: true
-      traefik.http.routers.school-reports.rule: Host(`school-reports.localhost`)
-      traefik.http.routers.school-reports.entrypoints: web,websecure
-      traefik.http.routers.school-reports.tls: true
+    database:
+        image: mariadb:10.6
+        ports:
+          - 6033:3306
+        volumes:
+          - sql:/var/lib/mysql
+        environment:
+          - MYSQL_ROOT_PASSWORD=geheim
+          - MYSQL_DATABASE=school-reports
+          - MYSQL_USER=dev
+          - MYSQL_PASSWORD=geheim
+        healthcheck:
+          test: mysql school-reports -u dev -pgeheim -e 'SHOW TABLES;'
+          interval: 5s
+          timeout: 5s
+          retries: 10
+          start_period: 1s
+
+    cache:
+        image: eqalpha/keydb
+        environment:
+          ALLOW_EMPTY_PASSWORD: yes
+        healthcheck:
+          test: [ "CMD", "redis-cli", "ping" ]
+          interval: 5s
+          timeout: 10s
+          retries: 10
+          start_period: 1s
+
+    app:
+        build:
+          context: ./
+          dockerfile: ./docker/Dockerfile
+          args:
+            - UID=${UID:-1000}
+            - GID=${GID:-1000}
+        depends_on:
+          cache:
+            condition: service_healthy
+          database:
+            condition: service_healthy
+        environment:
+          APP_URL: "https://school-reports.localhost"
+          APP_DEBUG: true
+          APP_ENV: local
+          DB_HOST: database
+          DB_DATABASE: school-reports
+          DB_USERNAME: dev
+          DB_PASSWORD: geheim
+          APM_ACTIVE: true
+          REDIS_HOST: cache
+          REDIS_CACHE_DB: 1
+        volumes:
+          - ./:/var/www/app
+          - ~/.config/composer:/home/myswooop/.composer
+          - ~/.cache/composer:/home/myswooop/.composer/cache
+        labels:
+          traefik.enable: true
+          traefik.http.routers.school-reports.rule: Host(`school-reports.localhost`)
+          traefik.http.routers.school-reports.entrypoints: web,websecure
+          traefik.http.routers.school-reports.tls: true
 
 
 
