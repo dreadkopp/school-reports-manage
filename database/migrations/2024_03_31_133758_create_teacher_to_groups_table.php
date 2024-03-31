@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\SchoolGroup;
+use App\Models\SchoolSubject;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,9 +14,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subject_groups', function (Blueprint $table) {
+        Schema::create('teacher_to_groups', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(SchoolGroup::class);
             $table->timestamps();
         });
     }
@@ -23,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subject_groups');
+        Schema::dropIfExists('teacher_to_groups');
     }
 };

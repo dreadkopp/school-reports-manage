@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('semesters', function (Blueprint $table) {
             $table->id();
+            $table->timestamp('start_date')->nullable();
+            $table->timestamp('end_date')->nullable();
+            $table->unique(['start_date','end_date']);
             $table->timestamps();
         });
     }
