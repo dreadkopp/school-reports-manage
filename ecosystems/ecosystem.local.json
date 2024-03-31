@@ -1,0 +1,31 @@
+{
+  "apps" : [
+    {
+      "name" : "migrate",
+      "script" : "artisan",
+      "args" : [
+        "migrate",
+        "--force"
+      ],
+      "instances" : 1,
+      "autorestart" : false,
+      "interpreter" : "php"
+    },
+    {
+      "name" : "octane - dev",
+      "script" : "artisan",
+      "args" : [
+        "octane:start",
+        "--workers=2",
+        "--task-workers=2",
+        "--port=80",
+        "--watch",
+        "--host=0.0.0.0"
+      ],
+      "instances" : 1,
+      "autorestart" : true,
+      "max_restarts" : 1,
+      "interpreter" : "php"
+    }
+  ]
+}

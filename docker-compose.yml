@@ -1,0 +1,57 @@
+version: '3.8'
+
+volumes:
+  sql:
+
+services:
+  database:
+    image: mariadb:10.6
+    ports:
+      - 6033:3306
+    volumes:
+      - sql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=geheim
+      - MYSQL_DATABASE=testimonials
+      - MYSQL_USER=dev
+      - MYSQL_PASSWORD=geheim
+    healthcheck:
+      test: mysql base -u dev -pgeheim -e 'SHOW TABLES;'
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 1s
+
+  cache:
+    image: eqalpha/keydb
+
+  app:
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    environment:
+      APP_URL: "https://testimonials.localhost"
+      APP_DEBUG: true
+      APP_ENV: local
+      DB_HOST: db
+      DB_DATABASE: testimonials
+      DB_USERNAME: dev
+      DB_PASSWORD: geheim
+      APM_ACTIVE: true
+      REDIS_HOST: cache
+      REDIS_CACHE_DB: 1
+    volumes:
+      - ./:/var/www/app
+      - ~/.config/composer:/home/myswooop/.composer
+      - ~/.cache/composer:/home/myswooop/.composer/cache
+    labels:
+      traefik.enable: true
+      traefik.http.routers.testimonials.rule: Host(`testimonials.localhost`)
+      traefik.http.routers.testimonials.entrypoints: web,websecure
+      traefik.http.routers.testimonials.tls: true
+
+
+

@@ -1,0 +1,64 @@
+{
+  "apps" : [
+    {
+      "name" : "migrate",
+      "script" : "artisan",
+      "args" : [
+        "migrate",
+        "--force"
+      ],
+      "instances" : 1,
+      "autorestart" : false,
+      "interpreter" : "php"
+    },
+    {
+      "name" : "octane",
+      "script" : "artisan",
+      "args" : [
+        "octane:start",
+        "--workers=6",
+        "--task-workers=6",
+        "--port=80",
+        "--host=0.0.0.0"
+      ],
+      "instances" : 1,
+      "autorestart" : true,
+      "max_restarts" : 1,
+      "interpreter" : "php"
+    },
+    {
+      "name" : "scheduler",
+      "script" : "artisan",
+      "args" : [
+        "schedule:work"
+      ],
+      "instances" : 1,
+      "autorestart" : true,
+      "max_restarts" : 1,
+      "interpreter" : "php"
+    },
+    {
+      "name" : "queueworker - default",
+      "script" : "artisan",
+      "args" : [
+        "queue:work",
+        "redis",
+        "--sleep=3",
+        "--tries=3",
+        "--backoff=10",
+        "--timeout=120"
+      ],
+      "instances" : 2,
+      "autorestart" : true,
+      "max_restarts" : 1,
+      "interpreter" : "php"
+    },
+    {
+      "name" : "filebeat",
+      "script" : "/filebeat/filebeat -c /filebeat/laravel.yml",
+      "instances" : 1,
+      "autorestart" : true,
+      "max_restarts" : 1
+    }
+  ]
+}
