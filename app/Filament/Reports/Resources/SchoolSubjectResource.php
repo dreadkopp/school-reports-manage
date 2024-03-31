@@ -2,17 +2,20 @@
 
 namespace App\Filament\Reports\Resources;
 
-use App\Filament\Reports\Resources\SchoolSubjectResource\Pages;
-use App\Filament\Reports\Resources\SchoolSubjectResource\RelationManagers;
+use App\Filament\Reports\Resources\SchoolSubjectResource\Pages\CreateSchoolSubject;
+use App\Filament\Reports\Resources\SchoolSubjectResource\Pages\EditSchoolSubject;
+use App\Filament\Reports\Resources\SchoolSubjectResource\Pages\ListSchoolSubjects;
 use App\Models\SchoolSubject;
 use App\Models\SubjectGroup;
-use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SchoolSubjectResource extends Resource
 {
@@ -24,11 +27,11 @@ class SchoolSubjectResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->required(),
-                Forms\Components\Select::make('subject_group_id')
-                ->options(SubjectGroup::query()->pluck('name','id'))
-                    ->required()
+                Select::make('subject_group_id')
+                    ->options(SubjectGroup::query()->pluck('name', 'id'))
+                    ->required(),
             ]);
     }
 
@@ -36,17 +39,16 @@ class SchoolSubjectResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name'),
             ])
             ->filters([
-                //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -54,16 +56,15 @@ class SchoolSubjectResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSchoolSubjects::route('/'),
-            'create' => Pages\CreateSchoolSubject::route('/create'),
-            'edit' => Pages\EditSchoolSubject::route('/{record}/edit'),
+            'index'  => ListSchoolSubjects::route('/'),
+            'create' => CreateSchoolSubject::route('/create'),
+            'edit'   => EditSchoolSubject::route('/{record}/edit'),
         ];
     }
 }

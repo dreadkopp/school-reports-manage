@@ -2,17 +2,20 @@
 
 namespace App\Filament\Reports\Resources;
 
-use App\Filament\Reports\Resources\PupilResource\Pages;
-use App\Filament\Reports\Resources\PupilResource\RelationManagers;
+use App\Filament\Reports\Resources\PupilResource\Pages\CreatePupil;
+use App\Filament\Reports\Resources\PupilResource\Pages\EditPupil;
+use App\Filament\Reports\Resources\PupilResource\Pages\ListPupils;
 use App\Models\Pupil;
 use App\Models\SchoolGroup;
-use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PupilResource extends Resource
 {
@@ -24,10 +27,10 @@ class PupilResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->required(),
-                Forms\Components\Select::make('school_group_id')
-                ->options(SchoolGroup::query()->pluck('name','id')->toArray())
+                Select::make('school_group_id')
+                    ->options(SchoolGroup::query()->pluck('name', 'id')->toArray())
                     ->required(),
             ]);
     }
@@ -36,17 +39,16 @@ class PupilResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name'),
             ])
             ->filters([
-                //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -54,16 +56,15 @@ class PupilResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPupils::route('/'),
-            'create' => Pages\CreatePupil::route('/create'),
-            'edit' => Pages\EditPupil::route('/{record}/edit'),
+            'index'  => ListPupils::route('/'),
+            'create' => CreatePupil::route('/create'),
+            'edit'   => EditPupil::route('/{record}/edit'),
         ];
     }
 }

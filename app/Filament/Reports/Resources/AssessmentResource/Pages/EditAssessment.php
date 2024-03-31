@@ -3,7 +3,7 @@
 namespace App\Filament\Reports\Resources\AssessmentResource\Pages;
 
 use App\Filament\Reports\Resources\AssessmentResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditAssessment extends EditRecord
@@ -13,7 +13,7 @@ class EditAssessment extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

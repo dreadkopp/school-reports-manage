@@ -2,20 +2,22 @@
 
 namespace App\Filament\Reports\Resources;
 
-use App\Filament\Reports\Resources\AssessmentResource\Pages;
-use App\Filament\Reports\Resources\AssessmentResource\RelationManagers;
+use App\Filament\Reports\Resources\AssessmentResource\Pages\CreateAssessment;
+use App\Filament\Reports\Resources\AssessmentResource\Pages\EditAssessment;
+use App\Filament\Reports\Resources\AssessmentResource\Pages\ListAssessments;
 use App\Models\Assessment;
 use App\Models\Pupil;
 use App\Models\SchoolSubject;
 use App\Models\Semester;
 use Carbon\Carbon;
-use Filament\Forms;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AssessmentResource extends Resource
 {
@@ -25,7 +27,6 @@ class AssessmentResource extends Resource
 
     public static function form(Form $form): Form
     {
-
         $toolBarOptions = [
             'blockquote',
             'bold',
@@ -41,33 +42,32 @@ class AssessmentResource extends Resource
 
         return $form
             ->schema([
-                Forms\Components\Select::make('pupil_id')
-                ->options(Pupil::query()->pluck('name','id')->toArray())
-                ->required(),
+                Select::make('pupil_id')
+                    ->options(Pupil::query()->pluck('name', 'id')->toArray())
+                    ->required(),
 
-                Forms\Components\Select::make('school_subject_id')
-                    ->options(SchoolSubject::query()->pluck('name','id')->toArray())
-                ->required(),
+                Select::make('school_subject_id')
+                    ->options(SchoolSubject::query()->pluck('name', 'id')->toArray())
+                    ->required(),
 
-                Forms\Components\Select::make('semester_id')
+                Select::make('semester_id')
                     ->options(Semester::query()
                         ->where('end_date', '<=', Carbon::now())
                         ->lazy()
                         ->keyBy('id')
-                        ->map(fn(Semester $semester) => $semester->start_date->format('m-Y'). ' - ' . $semester->end_date->format('m-Y'))
+                        ->map(fn (Semester $semester) => $semester->start_date->format('m-Y').' - '.$semester->end_date->format('m-Y'))
                         ->toArray())
                     ->required(),
 
-                Forms\Components\RichEditor::make('descriptive')
+                RichEditor::make('descriptive')
                     ->columnSpanFull()
                     ->toolbarButtons($toolBarOptions),
-                Forms\Components\RichEditor::make('notes')
+                RichEditor::make('notes')
                     ->columnSpanFull()
                     ->toolbarButtons($toolBarOptions),
-                Forms\Components\RichEditor::make('internal_notes')
+                RichEditor::make('internal_notes')
                     ->columnSpanFull()
                     ->toolbarButtons($toolBarOptions),
-
             ]);
     }
 
@@ -75,17 +75,15 @@ class AssessmentResource extends Resource
     {
         return $table
             ->columns([
-                //
             ])
             ->filters([
-                //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -93,16 +91,15 @@ class AssessmentResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAssessments::route('/'),
-            'create' => Pages\CreateAssessment::route('/create'),
-            'edit' => Pages\EditAssessment::route('/{record}/edit'),
+            'index'  => ListAssessments::route('/'),
+            'create' => CreateAssessment::route('/create'),
+            'edit'   => EditAssessment::route('/{record}/edit'),
         ];
     }
 }

@@ -2,16 +2,18 @@
 
 namespace App\Filament\Reports\Resources;
 
-use App\Filament\Reports\Resources\SchoolGroupResource\Pages;
-use App\Filament\Reports\Resources\SchoolGroupResource\RelationManagers;
+use App\Filament\Reports\Resources\SchoolGroupResource\Pages\CreateSchoolGroup;
+use App\Filament\Reports\Resources\SchoolGroupResource\Pages\EditSchoolGroup;
+use App\Filament\Reports\Resources\SchoolGroupResource\Pages\ListSchoolGroups;
 use App\Models\SchoolGroup;
-use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SchoolGroupResource extends Resource
 {
@@ -23,8 +25,8 @@ class SchoolGroupResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
+                TextInput::make('name')
+                    ->required(),
             ]);
     }
 
@@ -32,17 +34,16 @@ class SchoolGroupResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name'),
             ])
             ->filters([
-                //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -50,16 +51,15 @@ class SchoolGroupResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSchoolGroups::route('/'),
-            'create' => Pages\CreateSchoolGroup::route('/create'),
-            'edit' => Pages\EditSchoolGroup::route('/{record}/edit'),
+            'index'  => ListSchoolGroups::route('/'),
+            'create' => CreateSchoolGroup::route('/create'),
+            'edit'   => EditSchoolGroup::route('/{record}/edit'),
         ];
     }
 }

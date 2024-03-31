@@ -2,16 +2,18 @@
 
 namespace App\Filament\Reports\Resources;
 
-use App\Filament\Reports\Resources\SubjectGroupResource\Pages;
-use App\Filament\Reports\Resources\SubjectGroupResource\RelationManagers;
+use App\Filament\Reports\Resources\SubjectGroupResource\Pages\CreateSubjectGroup;
+use App\Filament\Reports\Resources\SubjectGroupResource\Pages\EditSubjectGroup;
+use App\Filament\Reports\Resources\SubjectGroupResource\Pages\ListSubjectGroups;
 use App\Models\SubjectGroup;
-use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SubjectGroupResource extends Resource
 {
@@ -23,8 +25,8 @@ class SubjectGroupResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
+                TextInput::make('name')
+                    ->required(),
             ]);
     }
 
@@ -32,17 +34,16 @@ class SubjectGroupResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name'),
             ])
             ->filters([
-                //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -50,16 +51,15 @@ class SubjectGroupResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSubjectGroups::route('/'),
-            'create' => Pages\CreateSubjectGroup::route('/create'),
-            'edit' => Pages\EditSubjectGroup::route('/{record}/edit'),
+            'index'  => ListSubjectGroups::route('/'),
+            'create' => CreateSubjectGroup::route('/create'),
+            'edit'   => EditSubjectGroup::route('/{record}/edit'),
         ];
     }
 }

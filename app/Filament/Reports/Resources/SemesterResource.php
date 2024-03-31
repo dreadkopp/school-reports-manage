@@ -2,16 +2,18 @@
 
 namespace App\Filament\Reports\Resources;
 
-use App\Filament\Reports\Resources\SemesterResource\Pages;
-use App\Filament\Reports\Resources\SemesterResource\RelationManagers;
+use App\Filament\Reports\Resources\SemesterResource\Pages\CreateSemester;
+use App\Filament\Reports\Resources\SemesterResource\Pages\EditSemester;
+use App\Filament\Reports\Resources\SemesterResource\Pages\ListSemesters;
 use App\Models\Semester;
-use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SemesterResource extends Resource
 {
@@ -23,9 +25,9 @@ class SemesterResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\DatePicker::make('start_date')
+                DatePicker::make('start_date')
                     ->required(),
-                Forms\Components\DatePicker::make('end_date')
+                DatePicker::make('end_date')
                     ->required(),
             ]);
     }
@@ -34,18 +36,17 @@ class SemesterResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('start_date')->date('m-Y'),
-                Tables\Columns\TextColumn::make('end_date')->date('m-Y'),
+                TextColumn::make('start_date')->date('m-Y'),
+                TextColumn::make('end_date')->date('m-Y'),
             ])
             ->filters([
-                //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -53,16 +54,15 @@ class SemesterResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSemesters::route('/'),
-            'create' => Pages\CreateSemester::route('/create'),
-            'edit' => Pages\EditSemester::route('/{record}/edit'),
+            'index'  => ListSemesters::route('/'),
+            'create' => CreateSemester::route('/create'),
+            'edit'   => EditSemester::route('/{record}/edit'),
         ];
     }
 }

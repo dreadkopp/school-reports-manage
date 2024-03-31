@@ -3,7 +3,7 @@
 namespace App\Filament\Reports\Resources\SemesterResource\Pages;
 
 use App\Filament\Reports\Resources\SemesterResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListSemesters extends ListRecords
@@ -13,7 +13,7 @@ class ListSemesters extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

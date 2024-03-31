@@ -2,16 +2,18 @@
 
 namespace App\Filament\Reports\Resources;
 
-use App\Filament\Reports\Resources\UserResource\Pages;
-use App\Filament\Reports\Resources\UserResource\RelationManagers;
+use App\Filament\Reports\Resources\UserResource\Pages\CreateUser;
+use App\Filament\Reports\Resources\UserResource\Pages\EditUser;
+use App\Filament\Reports\Resources\UserResource\Pages\ListUsers;
 use App\Models\User;
-use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UserResource extends Resource
 {
@@ -23,13 +25,13 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->required(),
-                Forms\Components\TextInput::make('email')->email()
+                TextInput::make('email')->email()
                     ->required(),
-                Forms\Components\TextInput::make('password')->password()
+                TextInput::make('password')->password()
                     ->required(),
-                Forms\Components\TextInput::make('password_confirm')->password()
+                TextInput::make('password_confirm')->password()
                     ->same('password')
                     ->required(),
             ]);
@@ -39,18 +41,17 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('email'),
+                TextColumn::make('name'),
+                TextColumn::make('email'),
             ])
             ->filters([
-                //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -58,16 +59,15 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index'  => ListUsers::route('/'),
+            'create' => CreateUser::route('/create'),
+            'edit'   => EditUser::route('/{record}/edit'),
         ];
     }
 }

@@ -2,26 +2,29 @@
 
 namespace App\Models;
 
+use Database\Factories\PupilFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
- * 
+ * @property int         $id
+ * @property string      $name
+ * @property int         $school_group_id
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
  *
- * @property int $id
- * @property string $name
- * @property int $school_group_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Database\Factories\PupilFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|Pupil newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Pupil newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Pupil query()
- * @method static \Illuminate\Database\Eloquent\Builder|Pupil whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Pupil whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Pupil whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Pupil whereSchoolGroupId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Pupil whereUpdatedAt($value)
+ * @method static PupilFactory  factory($count = null, $state = [])
+ * @method static Builder|Pupil newModelQuery()
+ * @method static Builder|Pupil newQuery()
+ * @method static Builder|Pupil query()
+ * @method static Builder|Pupil whereCreatedAt($value)
+ * @method static Builder|Pupil whereId($value)
+ * @method static Builder|Pupil whereName($value)
+ * @method static Builder|Pupil whereSchoolGroupId($value)
+ * @method static Builder|Pupil whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Pupil extends Model
@@ -30,6 +33,6 @@ class Pupil extends Model
 
     protected $fillable = [
         'name',
-        'school_group_id'
+        'school_group_id',
     ];
 }
