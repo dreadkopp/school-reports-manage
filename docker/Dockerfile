@@ -78,13 +78,13 @@ RUN rm /etc/crontabs/root
 
 ARG UID=1000
 ARG GID=1000
-RUN addgroup -S testimonials -g $GID && adduser -S testimonials -G testimonials -u $UID && chown testimonials:testimonials /var/www/app
+RUN addgroup -S school-reports -g $GID && adduser -S school-reports -G school-reports -u $UID && chown school-reports:school-reports /var/www/app
 
-RUN chown -R testimonials:testimonials /var/log
+RUN chown -R school-reports:school-reports /var/log
 
 COPY  --chmod=444 ../docker_config/php.ini /usr/local/etc/php/php.ini
 
-USER testimonials
+USER school-reports
 
-COPY --chown=testimonials docker_config/entry.sh /entry.sh
+COPY --chown=school-reports docker_config/entry.sh /entry.sh
 ENTRYPOINT ["/entry.sh"]

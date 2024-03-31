@@ -12,11 +12,11 @@ services:
       - sql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=geheim
-      - MYSQL_DATABASE=testimonials
+      - MYSQL_DATABASE=school-reports
       - MYSQL_USER=dev
       - MYSQL_PASSWORD=geheim
     healthcheck:
-      test: mysql testimonials -u dev -pgeheim -e 'SHOW TABLES;'
+      test: mysql school-reports -u dev -pgeheim -e 'SHOW TABLES;'
       interval: 5s
       timeout: 5s
       retries: 10
@@ -46,11 +46,11 @@ services:
       database:
         condition: service_healthy
     environment:
-      APP_URL: "https://testimonials.localhost"
+      APP_URL: "https://school-reports.localhost"
       APP_DEBUG: true
       APP_ENV: local
       DB_HOST: database
-      DB_DATABASE: testimonials
+      DB_DATABASE: school-reports
       DB_USERNAME: dev
       DB_PASSWORD: geheim
       APM_ACTIVE: true
@@ -62,9 +62,9 @@ services:
       - ~/.cache/composer:/home/myswooop/.composer/cache
     labels:
       traefik.enable: true
-      traefik.http.routers.testimonials.rule: Host(`testimonials.localhost`)
-      traefik.http.routers.testimonials.entrypoints: web,websecure
-      traefik.http.routers.testimonials.tls: true
+      traefik.http.routers.school-reports.rule: Host(`school-reports.localhost`)
+      traefik.http.routers.school-reports.entrypoints: web,websecure
+      traefik.http.routers.school-reports.tls: true
 
 
 
