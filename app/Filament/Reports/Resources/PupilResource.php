@@ -15,6 +15,7 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -41,6 +42,7 @@ class PupilResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name'),
+                IconColumn::make('status'), //TODO: check all assessments for 'final' state
             ])
             ->filters([
             ])
