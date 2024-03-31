@@ -25,6 +25,20 @@ class AssessmentResource extends Resource
 
     public static function form(Form $form): Form
     {
+
+        $toolBarOptions = [
+            'blockquote',
+            'bold',
+            'bulletList',
+            'h2',
+            'h3',
+            'italic',
+            'orderedList',
+            'redo',
+            'underline',
+            'undo',
+        ];
+
         return $form
             ->schema([
                 Forms\Components\Select::make('pupil_id')
@@ -41,9 +55,15 @@ class AssessmentResource extends Resource
                         ->map(fn(Semester $semester) => $semester->start_date->format('m-Y'). ' - ' . $semester->end_date->format('m-Y'))
                         ->toArray()),
 
-                Forms\Components\RichEditor::make('content')('descriptive'),
-                Forms\Components\RichEditor::make('notes'),
-                Forms\Components\RichEditor::make('internal_notes'),
+                Forms\Components\RichEditor::make('descriptive')
+                    ->columnSpanFull()
+                    ->toolbarButtons($toolBarOptions),
+                Forms\Components\RichEditor::make('notes')
+                    ->columnSpanFull()
+                    ->toolbarButtons($toolBarOptions),
+                Forms\Components\RichEditor::make('internal_notes')
+                    ->columnSpanFull()
+                    ->toolbarButtons($toolBarOptions),
 
             ]);
     }
