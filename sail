@@ -6,6 +6,13 @@ if [[ $1 == 'up' ]]; then
   exit 0
 fi
 
+if [[ $1 == 'init' ]]; then
+  shift 1
+  docker-compose exec -it app composer install
+  docker-compose exec -it app npm ci
+  exit 0
+fi
+
 
 if [[ $1 == 'shell' ]]; then
   shift 1
